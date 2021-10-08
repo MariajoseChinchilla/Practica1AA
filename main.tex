@@ -1,0 +1,246 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{listings}   %para poner codigo
+\usepackage{xcolor} %formato de codigo
+\usepackage{algorithm}  %para analisis de algoritmos
+\usepackage{algpseudocode}
+\newcommand{\bigO}{\mathcal{O}} %notacion O grande
+\usepackage{hyperref} %para enlace a git
+
+%%%%%   colores para codigo  %%%
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{azure}{rgb}{0.94, 1.0, 1.0}
+\definecolor{awesome}{rgb}{1.0, 0.13, 0.32}
+
+%formato codigo %%
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{azure},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{awesome},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\title{PRÁCTICA I}
+\author{Mariajosé Chinchilla Morán}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Dos sumas}
+Dado un arreglo de enteros y un entero \textit{target}, devolver los índices de los números en el arreglo tales que su suma es igual a \textit{target.} \\
+
+\begin{lstlisting}[language=Python]
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+            for i in range(0,len(nums)-1):
+                list = nums[i+1:len(nums)]
+                if target - nums[i] in list:
+                    answer = [i,list.index(target - nums[i])+i+1]
+                    break
+            return answer
+\end{lstlisting}
+\vspace{0.5cm}
+
+\textbf{Análisis del algoritmo} \\
+\textit{Nota.} Se tomará $n = len(nums)$. Los costos también están tomados en el peor caso. 
+\begin{algorithm}
+\caption{Two Sum \hspace{5.5cm} \textit{costo} \hspace{0.5cm} \textit{veces}}\label{Primer algoritmo}
+\begin{algorithmic}
+\item \textbf{class Solution:} 
+    \item \hspace{0.3cm} \textbf{def} twoSum(self, nums, target): 
+    \item \hspace{0.7cm} \textbf{for} i in \textbf{range}(0, len(nums)-1):  \hspace{3.6cm}  $c_1$ \hspace{1cm} $n-1$
+    \item \hspace{1.2cm} list = nums[i+1:len(nums)] \hspace{3.7cm} $c_2$ \hspace{1cm} $n-1$
+                \item \hspace{1.2cm} \textbf{if} target - nums[i] in list: \hspace{4.05cm} $n$ \hspace{1.1cm} $n-1$ 
+                    \item \hspace{1.5cm} answer = [i,list.index(target - nums[i])+i+1] \hspace{0.77cm} $n$ \hspace{1.1cm} $n-1$
+                    \item \hspace{1.5cm} \textbf{break}
+            \item \hspace{0.7cm} \textbf{return} answer 
+\hspace{6.1cm} $c_5$ \hspace{1.3cm} 1 \\
+\end{algorithmic}
+\end{algorithm} 
+
+\textbf{TOTAL.}
+\begin{align*}
+    c_1(n-1) + c_2(n-1) + n(n-1) + n(n-1) + c_5 &= (n-1)(c_1+c_2+2n) + c_5 \\
+    &= 2n^2 + K_1n + K_2 \in \bigO(n^2).  \\
+\end{align*}
+
+%%%%%%%%%%%%% fin algoritmo 1 %%%%%%%%%%
+\newpage
+\section*{Primer caracter único en cadena}
+Dada una cadena, retornar el índice del primer caracter que no se repite. Si no existe, retornar $-1$. \\
+
+\begin{lstlisting}[language=Python]
+class Solution:
+    def firstUniqChar(self,s):
+        chars = set(s)
+        copystring = s
+        for char in chars:
+            s = s.replace(char,'',1)
+        else:
+            for letter in copystring:
+                if letter not in s:
+                    return copystring.index(letter)
+            for sym in s:
+                if sym in copystring:
+                    return -1
+\end{lstlisting}
+\vspace{0.5cm}
+
+\textbf{Análisis del algoritmo} \\
+\textit{Nota.} Se tomará $n=|set(s)|$, es decir, el número de caracteres distintos en la cadena y $m = len(s)$. \\
+\begin{algorithm}
+\caption{Primer caracter único \hspace{3.5cm} \textit{costo} \hspace{0.5cm} \textit{veces}}\label{Primer algoritmo}
+\begin{algorithmic}
+\item \textbf{class Solution:} 
+    \item \hspace{0.3cm} \textbf{def} firstUniqChar(self,s): 
+    \item \hspace{0.7cm} chars = set(s) \hspace{6.1cm} $c_1$ \hspace{1.1cm} 1
+    \item \hspace{0.7cm} copystring = s \hspace{6cm} $c_2$ \hspace{1.1cm} 1
+    \item  \hspace{0.7cm} \textbf{for} char \textbf{in} chars: \hspace{5.5cm} $c_3$ \hspace{1.1cm} $n$
+            \item \hspace{1.3cm} s = s.replace(char,'',1) \hspace{3.9cm} $m-n$ \hspace{0.8cm} $n$
+        \item \hspace{0.7cm} \textbf{else}:
+            \item \hspace{1.3cm} \textbf{for} letter \textbf{in} copystring: \hspace{4cm} $c_4$ \hspace{1.1cm} $m$
+                \item \hspace{1.6cm} \textbf{if} letter \textbf{not in} s: \hspace{4.4cm} $m-n$ \hspace{0.7cm} $m$
+                    \item \hspace{1.9cm} \textbf{return} copystring.index(letter) \hspace{2.3cm} $m$ \hspace{1.1cm} 1
+            \item \hspace{1.3cm} \textbf{for} sym \textbf{in} s: \hspace{5.65cm} $c_5$ \hspace{0.7cm} $m-n$
+                \item \hspace{1.6cm} \textbf{if} sym \textbf{in} copystring: \hspace{4.1cm} $m$ \hspace{0.7cm} $m-n$
+                    \item \hspace{1.9cm} \textbf{return} -1 \hspace{5.5cm} $c_6$ \hspace{1.1cm} 1 \\
+\end{algorithmic}
+\end{algorithm} \\
+
+\textbf{TOTAL} 
+\begin{align*}
+    c_1+c_2+c_3n+(m+n)^2+c_4m+m+(m+n)(c_5+m)+c_6 &\leq \\
+    c_1+c_2+m(c_3+c_4+1)+2m(3m+c_5)+c_6 &= \\
+    K_1 + K_2m + 6m^2 \in \bigO(m^2),
+\end{align*}
+donde la desigualdad se da porque $n \leq m$.
+%%%%%%%%%%%%%%%% fin algoritmo 2 %%%%%%%%%%
+\newpage
+\section*{Búsqueda en matriz 2D}
+Escribir un algoritmo eficiente para buscar un valor en una matriz de enteros de mxn. Los valores en la matriz satisfacen 
+\begin{itemize}
+    \item Enteros en cada fila están ordenados de izquierda a derecha.
+    \item El primer entero en cada fila es mayor al último de la fila anterior.
+\end{itemize}
+Retornar verdadero si el valor está en la matriz y falso de otro modo.
+
+\begin{lstlisting}[language=Python]
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        cols = len(matrix[0])
+        rows = len(matrix)
+        margins = []
+        for i in range(rows):
+            margins.append(matrix[i][cols-1])
+        for num in margins:
+            if target <= num:
+                if target in matrix[margins.index(num)]:
+                    return True
+                break
+        return False
+\end{lstlisting}
+\vspace{0.5cm}
+
+\textbf{Análisis del algoritmo} \\
+\textit{Nota.} Se definen $n=cools, m = rows$ y $N = nxm$.
+\begin{algorithm}
+\caption{Búsqueda en matriz 2D \hspace{3.5cm} \textit{costo} \hspace{0.5cm} \textit{veces}}\label{Primer algoritmo}
+\begin{algorithmic}
+\item \textbf{class} Solution:
+    \item \hspace{0.3cm} \textbf{def} searchMatrix(self, matrix, target):
+        \item \hspace{0.7cm} cols = len(matrix[0]) \hspace{5.2cm} $c_1$ \hspace{1.1cm} 1 
+        \item \hspace{0.7cm} rows = len(matrix) \hspace{5.45cm} $c_2$ \hspace{1.1cm} 1
+        \item \hspace{0.7cm} margins = [] \hspace{6.5cm} $c_3$ \hspace{1.1cm} 1
+        \item \hspace{0.7cm} \textbf{for} i \textbf{in} \textbf{range(rows)}: \hspace{4.95cm} $c_4$ \hspace{1.1cm} $m$
+            \item \hspace{1.2cm} margins.append(matrix[i][cols-1]) \hspace{2.85cm} $c_5$ \hspace{1.1cm} $m$
+        \item \hspace{0.7cm} \textbf{for} num \textbf{in} margins: \hspace{5.3cm} $c_6$ \hspace{1.1cm} $m$
+            \item \hspace{1.2cm} \textbf{if} target $<=$ num: \hspace{5.1cm} $c_7$ \hspace{1.1cm} $m$
+                \item \hspace{1.6cm} \textbf{if} target \textbf{in} matrix[margins.index(num)]: \hspace{0.7cm} $\max(m,n)$ \hspace{0.4cm} $m$
+                    \item \hspace{1.9cm} \textbf{return}  \textbf{True} \hspace{5.25cm} $c_8$ \hspace{1.1cm} 1
+                \item \hspace{1.6cm} \textbf{break} \hspace{6.6cm} $c_9$ \hspace{1.1cm} 1
+        \item \hspace{0.7cm} \textbf{return False} \hspace{6.3cm} $c_{10}$ \hspace{1.1cm} 0 \\
+\end{algorithmic} 
+\end{algorithm} \\
+\textbf{TOTAL.} 
+\begin{align*}
+    c_1 + c_2 + c_3 + m(c_4+c_5+c_6+c_7+\max(m,n)) + c_8+c_9 \in
+   \\
+    \left\{ \begin{array}{lcc}
+             K_1+K_2N = \bigO(N) &   si  & \max(n,m) = n \\
+             \\ K_1+K_2m+K_3m^2 = \bigO(m^2) &  si & \max(n,m) = m. \\
+             \end{array}
+   \right.
+\end{align*}
+
+%%%%%%%%%%%% fin algoritmo 3 %%%%%%%%%%%
+
+\newpage
+\section*{Reacomodar matriz}
+Se es dada una matriz de mxm y dos enteros $r$ y $c$ que representan el número de filas y columnas de una nueva matriz deseada respectivamente. Reacomodar la matriz original en una de rxc. Si no es posible, retornar la matriz original. 
+
+\begin{lstlisting}[language=Python]
+class Solution:
+    def matrixReshape(self, mat: List[List[int]], r: int, c: int) -> List[List[int]]:
+        cols = len(mat[0])
+        rows = len(mat)
+        output = []
+        nums = []
+        if r * c != cols * rows:
+            return mat
+        else:
+            for i in range(rows):
+                for j in range(cols):
+                    nums.append(mat[i][j])
+            for i in range(r):
+                output.append(nums[i*c:(i+1)*c])
+            return output
+\end{lstlisting}
+\vspace{0.5cm}
+
+\textbf{Análisis del algoritmo} \\
+\textit{Nota.} Se definen $n=rows, m = cols$ y $N = nm$. En el caso de una entrada válida para reacomodo de matriz,  $N=nm=rc$.
+\begin{algorithm}
+\caption{Reacomodar matriz \hspace{3.5cm} \textit{costo} \hspace{0.5cm} \textit{veces}}\label{Primer algoritmo}
+\begin{algorithmic}
+\item \textbf{class} Solution:
+    \item \hspace{0.3cm} \textbf{def} matrixReshape(self, mat, r, c):
+    \item \hspace{0.7cm} cols = len(mat[0]) \hspace{5.2cm} $c_1$ \hspace{1.1cm} 1
+        \item \hspace{0.7cm} rows = len(mat) \hspace{5.45cm} $c_2$ \hspace{1.1cm} 1
+        \item \hspace{0.7cm} output = [] \hspace{6.25cm} $c_3$ \hspace{1.1cm} 1
+        \item \hspace{0.7cm} nums = [] \hspace{6.5cm} $c_4$ \hspace{1.1cm} 1
+        \item \hspace{0.7cm} \textbf{if} r * c != cols * rows: \hspace{4.5cm} $c_5$ \hspace{1.1cm} 1
+            \item \hspace{1.2cm} \textbf{return} mat \hspace{5.6cm} $c_6$ \hspace{1.1cm} 1
+        \item \hspace{0.7cm} \textbf{else}: 
+            \item \hspace{1.2cm} \textbf{for} i \textbf{in} range(rows): \hspace{4.3cm} $c_7$ \hspace{1.1cm} $n$
+                \item \hspace{1.6cm} \textbf{for} j \textbf{in} \textbf{range(cols)}: \hspace{3.75cm} $c_8$ \hspace{1.1cm} $nm$
+                    \item \hspace{1.9cm} nums.append(mat[i][j]) \hspace{3.25cm} $c_9$ \hspace{1.1cm} $nm$
+            \item \hspace{1.2cm} \textbf{for} i \textbf{in range(r)}: \hspace{4.55cm} $c_{10}$ \hspace{1.1cm} $r$
+                \item \hspace{1.6cm} output.append(nums[i*c:(i+1)*c]) \hspace{1.8cm} $c_{11}$ \hspace{1.1cm} $r$
+            \item \hspace{1.2cm} \textbf{return} output \hspace{5.2cm} $c_{12}$ \hspace{1.05cm} 1
+\end{algorithmic}
+\end{algorithm} \\
+\textbf{TOTAL.} 
+\begin{align*}
+    c_1+c_2+\cdots + c_6 + nc_7 + mn(c_8+c_9)+r(c_{10}+c_{11}) + c_{12} &\leq K_1 + K_2N \in \bigO(N).
+\end{align*}
+\\
+\textbf{Enlace a Github.} \\
+\url{https://github.com/MariajoseChinchilla/Practica1AA}
+\end{document}
